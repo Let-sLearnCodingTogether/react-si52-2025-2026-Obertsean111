@@ -2,7 +2,30 @@ import { createBrowserRouter } from "react-router"
 
 const router = createBrowserRouter([
   {
-    path : "/", //alamat page
+    path : "/",
+    children : [
+      {
+        index : true,
+        lazy : {
+          Component : async() => {
+            const component = await import ("../pages/movies/auth/signup/SignUp.tsx")
+            return component.default
+          } 
+        }
+      },
+      {
+        path : "signin",
+        lazy : {
+          Component : async() => {
+            const component = await import ("../pages/movies/auth/signin/SignIn.tsx")
+            return component.default
+          }
+        }
+      },
+    ]
+  },
+  {
+    path : "/movie", //alamat page
     children : [
       {
         index : true,
@@ -21,9 +44,9 @@ const router = createBrowserRouter([
             return component.default
           }
         }
-      }
+      },
     ]
-  }
+  },
 ]);
 
 export default router
