@@ -40,6 +40,9 @@ function Movie() {
 
     return <div className="container mx-auto">
         <div className="d-flex justify-content-between mb-3">
+            <div className="d-flex justify-content-between mb-3">
+                <NavLink to="/" className="btn btn-danger">Logout</NavLink>
+            </div>
             <h4>Movie Page</h4>
             <NavLink to="/movie/add-movie" className="btn btn-primary">Add Movie</NavLink>
         </div>
@@ -66,6 +69,7 @@ function Movie() {
                                 <td>{movie.tahunRilis}</td>
                                 <td>{movie.sutradara}</td>
                                 <td>
+                                    <NavLink to={`/movies/edit-movie/${movie._id}`} className="btn btn-primary">Edit</NavLink>
                                     <Button variant="btn btn-danger" onClick={() => handleDelete(movie._id) }>Delete</Button>
                                 </td>
                             </tr>

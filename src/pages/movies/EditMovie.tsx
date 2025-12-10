@@ -1,7 +1,7 @@
-import { NavLink } from "react-router";
+import { NavLink, replace, useNavigate, useParams } from "react-router";
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form";
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import ApiClient from "../../utils/ApiClient";
 
 interface FormMovie {
@@ -10,12 +10,41 @@ interface FormMovie {
     sutradara: string
 }
 
-function AddMovie() {
+interface ResponseData {
+    data : {
+    _id : string,
+    judul : string,
+    tahunRilis : string,
+    sutradara : string,
+    updateAt : string,
+    createdAt : string,
+    _v : string
+    }
+  
+}
+
+function EditMovie() {
+    const params = useParams()
+    const navigate = useNavigate()
     const [form, setForm] =  useState<FormMovie>({
         judul: "",
         tahunRilis: "",
         sutradara: ""
     });
+
+
+    const fetchMovie = useCallback (async () => {
+    const response = await ApiClient.put(`/movie/${params.id}`);
+
+    if (Response.status === 200) {
+        const responseData : ResponseData = response.data
+        setForm({
+            judul : responseData.data.judul,
+            tahunRilis : responseData.data.tahunRilis,
+            sutradara : responseData.data.sutradara
+        })
+    }
+},[params])
 
     const handleInputChange = (event : ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
@@ -30,12 +59,18 @@ function AddMovie() {
 
         try{
             const response = await ApiClient.put("/movie", form);
-            console.log(response);
+            navigate("/movie",{
+                replace : true
+            })
 
         } catch (error) {
             console.log(error);
         }
     }
+
+    useEffect(() => {
+        fetchMovie()
+    }, [fetchMovie])
 
     return <div>
         <div>
@@ -54,7 +89,7 @@ function AddMovie() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId='formTahunRilis'>
-                    <Form.Label>Tahun Rilis</Form.Label>
+                    <Form.Label>Judul</Form.Label>
                     <Form.Control 
                     value ={form.tahunRilis}
                     onChange={handleInputChange}
@@ -64,7 +99,7 @@ function AddMovie() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId='formSutradara'>
-                    <Form.Label>Sutradara</Form.Label>
+                    <Form.Label>Judul</Form.Label>
                     <Form.Control 
                     value ={form.sutradara}
                     onChange={handleInputChange}
@@ -80,4 +115,4 @@ function AddMovie() {
     </div>
 }
 
-export default AddMovie;
+export default EditMovie;
