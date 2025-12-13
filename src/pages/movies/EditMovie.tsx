@@ -1,4 +1,4 @@
-import { NavLink, replace, useNavigate, useParams } from "react-router";
+import { NavLink, useNavigate, useParams } from "react-router";
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form";
 import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from "react";
@@ -17,10 +17,9 @@ interface ResponseData {
     tahunRilis : string,
     sutradara : string,
     updateAt : string,
-    createdAt : string,
-    _v : string
+    createdAt : string
     }
-  
+
 }
 
 function EditMovie() {
@@ -34,9 +33,9 @@ function EditMovie() {
 
 
     const fetchMovie = useCallback (async () => {
-    const response = await ApiClient.put(`/movie/${params.id}`);
+    const response = await ApiClient.post(`/movie/${params.id}`);
 
-    if (Response.status === 200) {
+    if (response.status === 200) {
         const responseData : ResponseData = response.data
         setForm({
             judul : responseData.data.judul,
@@ -58,11 +57,8 @@ function EditMovie() {
         event.preventDefault();
 
         try{
-            const response = await ApiClient.put("/movie", form);
-            navigate("/movie",{
-                replace : true
-            })
-
+            const response : { data: ResponseData} = await ApiClient.put(`/movie/${params.id}`, form);
+                navigate("/movie", {replace : true});
         } catch (error) {
             console.log(error);
         }
@@ -109,9 +105,6 @@ function EditMovie() {
                 </Form.Group>
                 <Button type="submit" variant="primary">Simpan</Button>
             </Form>
-            <div>
-                <Button variant="btn btn-success">Tambah</Button>
-            </div>
     </div>
 }
 

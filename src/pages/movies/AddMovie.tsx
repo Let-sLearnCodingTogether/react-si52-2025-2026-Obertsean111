@@ -29,7 +29,7 @@ function AddMovie() {
         event.preventDefault();
 
         try{
-            const response = await ApiClient.put("/movie", form);
+            const response = await ApiClient.post("/movie", form);
             console.log(response);
 
         } catch (error) {
@@ -72,7 +72,7 @@ function AddMovie() {
                     type="text"
                     placeholder="Sutradara"></Form.Control>
                 </Form.Group>
-                <Button type="submit" variant="primary">Simpan</Button>
+                    <Button type="submit" variant="primary" >Simpan</Button>
             </Form>
             <div>
                 <Button variant="btn btn-success">Tambah</Button>
